@@ -1,0 +1,19 @@
+[Unit]
+Description=Prismatic Deploy Pilot Service (port 9461)
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/.prismatic/current-prismatic-deploy-pilot
+ExecStart=/home/ubuntu/.prismatic/venv_current-prismatic-deploy-pilot/bin/python -m pilot_service.server
+Environment=PILOT_PORT=9461
+Environment=PATH=/home/ubuntu/.prismatic/venv_current-prismatic-deploy-pilot/bin:/usr/local/bin:/usr/bin:/bin
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:/home/ubuntu/.prismatic/logs/deploy-pilot.log
+StandardError=append:/home/ubuntu/.prismatic/logs/deploy-pilot.log
+
+[Install]
+WantedBy=multi-user.target

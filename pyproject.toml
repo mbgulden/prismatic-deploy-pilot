@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prismatic-deploy-pilot"
+version = "0.1.0"
+description = "Portability pilot service: proves Prismatic's multi-repo post-merge deploy"
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+include = ["pilot_service*"]
