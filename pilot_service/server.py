@@ -29,7 +29,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:  # noqa: N802 - http.server convention
         if self.path == "/health":
-            self._send_json(200, {"ok": True, "version": __version__})
+            self._send_json(500, {"ok": False, "error": "deliberate rollback-test breakage"})
         elif self.path == "/version":
             body = __version__.encode()
             self.send_response(200)
