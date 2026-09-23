@@ -53,3 +53,23 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+# --- Vercel serverless entrypoint (WSGI, stdlib only) ---
+# Vercel's Python runtime imports this module and calls `app` per request.
+# The systemd path (main()/Handler above) is unchanged.
+
+def _wsgi_response(start_response, code, content_type, body: bytes):
+    start_response(code, [("Content-Type", content_type),
+                          ("Content-Length", str(len(body)))])
+    return [body]
+
+
+def app(environ, start_response):  # noqa: N802 - WSGI convention
+    path = environ.get("PATH_INFO", "/") or "/"
+    if path == "/health":
+        return _wsgi_response(start_response, "200 OK", "application/json",
+                              json.dumps({"ok": True, "version": __version__}).encode())
+    if path == "/version":
+        return _wsgi_response(start_response, "200 OK", "text/plain",
+                              __version__.encode())
+    return _wsgi_response(start_response, "404 Not Found", "application/json",
+                          json.dumps({"ok": False, "error": "not found"}).encode())
